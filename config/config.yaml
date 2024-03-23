@@ -1,0 +1,12 @@
+app:
+  name: 'go-clean-archicteture'
+
+api:
+  http:
+    host: localhost
+    port: 8080
+
+database:
+  connectionString: "postgres://user:password@localhost:5433/go_clean_arch?sslmode=disable"
+  maxOpenConnections: 0 #0 = unlimited
+  maxIdleConnections: 2
