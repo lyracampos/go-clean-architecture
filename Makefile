@@ -1,7 +1,12 @@
 PG_CONNECTION_STRING ?= 'postgres://user:password@localhost:5433/go_clean_arch?sslmode=disable'
-
 MIGRATE := go run -tags='postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.17.0
 MIGRATIONS_PATH ?= './internal/gateways/postgres/migrations'
+
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.1
+
+.PHONY: lint
+lint:
+	$(GOLANGCI_LINT) run --fix
 
 .PHONY: build
 build:

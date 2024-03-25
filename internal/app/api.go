@@ -11,6 +11,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/lyracampos/go-clean-architecture/config"
+	"github.com/lyracampos/go-clean-architecture/internal/domain"
 	"github.com/lyracampos/go-clean-architecture/internal/domain/usecases"
 	"github.com/lyracampos/go-clean-architecture/internal/gateways/postgres"
 	"github.com/lyracampos/go-clean-architecture/internal/services/api/handlers"
@@ -24,7 +25,12 @@ func RunAPI(config *config.Config) {
 	if err != nil {
 		log.Fatalf("can't initialize zap logger: %v", err)
 	}
-	defer logger.Sync()
+	defer func() {
+		if err := logger.Sync(); err != nil {
+			log.Fatalf("failed to defer logger sync: %v", err)
+		}
+	}()
+
 	sugar := logger.Sugar()
 
 	// database
@@ -35,10 +41,12 @@ func RunAPI(config *config.Config) {
 
 	userDatabaseGateway := postgres.NewUserDatabase(postgresClient)
 
+	validator := domain.NewValidatorService()
+
 	// use cases
 	listUserUseCase := usecases.NewListUserUseCase(userDatabaseGateway)
 	getUserUseCase := usecases.NewGetUserUseCase(userDatabaseGateway)
-	createUserUseCase := usecases.NewCreateUserUseCase(userDatabaseGateway)
+	createUserUseCase := usecases.NewCreateUserUseCase(userDatabaseGateway, validator)
 
 	// health handler
 	healthHandler := handlers.NewHealthHandler(sugar)
@@ -92,7 +100,9 @@ func RunAPI(config *config.Config) {
 
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.
-	server.Shutdown(ctx)
+	if err := server.Shutdown(ctx); err != nil {
+		sugar.Errorln("Error shutting down server: %w", err)
+	}
 
 	log.Println("shutting down")
 }

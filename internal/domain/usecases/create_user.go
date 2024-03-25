@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/lyracampos/go-clean-architecture/internal/domain"
 	"github.com/lyracampos/go-clean-architecture/internal/domain/entities"
 	"github.com/lyracampos/go-clean-architecture/internal/domain/ports"
 )
@@ -16,10 +17,10 @@ type CreateUserUseCase interface {
 }
 
 type CreateUserInput struct {
-	FirstName string
-	LastName  string
-	Email     string
-	Role      string
+	FirstName string `validate:"required"`
+	LastName  string `validate:"required"`
+	Email     string `validate:"required"`
+	Role      string `validate:"required,oneof=admin contributor"`
 }
 
 type CreateUserOutput struct {
@@ -33,16 +34,21 @@ type CreateUserOutput struct {
 
 type createUserUseCase struct {
 	userDatabase ports.UserDatabaseGateway
+	validator    domain.Validator
 }
 
-func NewCreateUserUseCase(userDatabase ports.UserDatabaseGateway) *createUserUseCase {
+func NewCreateUserUseCase(userDatabase ports.UserDatabaseGateway, validator domain.Validator) *createUserUseCase {
 	return &createUserUseCase{
 		userDatabase: userDatabase,
+		validator:    validator,
 	}
 }
 
 func (u *createUserUseCase) Execute(ctx context.Context, input CreateUserInput) (CreateUserOutput, error) {
-	// validate
+	err := u.validator.Validate(input)
+	if err != nil {
+		return CreateUserOutput{}, fmt.Errorf("input is invalid: %w", err)
+	}
 
 	newUser := u.fromInputToEntity(input)
 

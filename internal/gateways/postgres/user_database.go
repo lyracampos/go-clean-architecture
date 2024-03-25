@@ -23,9 +23,25 @@ func NewUserDatabase(client *Client) *userDatabase {
 	}
 }
 
-func (g *userDatabase) ListUser(ctx context.Context) ([]*entities.User, error) {
+func (g *userDatabase) ListUser(ctx context.Context, filter ports.ListUserFilter) ([]*entities.User, error) {
 	var modelList []models.User
 	query := g.Client.DB.NewSelect().Model(&modelList)
+
+	if filter.FirstName != "" {
+		query.Where("first_name LIKE ?", "%"+filter.FirstName+"%")
+	}
+
+	if filter.LastName != "" {
+		query.Where("last_name LIKE ?", "%"+filter.LastName+"%")
+	}
+
+	if filter.Email != "" {
+		query.Where("email LIKE ?", "%"+filter.Email+"%")
+	}
+
+	if filter.Role != "" {
+		query.Where("? = ?", bun.Ident("role"), filter.Role)
+	}
 
 	if err := query.Scan(ctx); err != nil {
 		if strings.Contains(err.Error(), NoRowsInResultSet) {

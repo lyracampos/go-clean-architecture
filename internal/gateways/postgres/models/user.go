@@ -39,7 +39,7 @@ func (u *User) ToEntity() *entities.User {
 		ID:        u.ID,
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
-		Email:     u.LastName,
+		Email:     u.Email,
 		Role:      u.Role,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,

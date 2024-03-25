@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/lyracampos/go-clean-architecture/internal/domain/entities"
 	"github.com/lyracampos/go-clean-architecture/internal/domain/ports"
@@ -14,8 +15,10 @@ type ListUserUseCase interface {
 }
 
 type ListUserInput struct {
-	Email string
-	Role  string
+	FirstName string
+	LastName  string
+	Email     string
+	Role      string
 }
 
 type ListUserOutput struct {
@@ -34,9 +37,14 @@ func NewListUserUseCase(userDatabaseGateway ports.UserDatabaseGateway) *listUser
 }
 
 func (u *listUserUseCase) Execute(ctx context.Context, input ListUserInput) (ListUserOutput, error) {
-	users, err := u.userDatabaseGateway.ListUser(ctx)
+	users, err := u.userDatabaseGateway.ListUser(ctx, ports.ListUserFilter{
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+		Email:     input.Email,
+		Role:      input.Role,
+	})
 	if err != nil {
-		return ListUserOutput{}, nil
+		return ListUserOutput{}, fmt.Errorf("failed to list user from database: %w", err)
 	}
 
 	return ListUserOutput{
