@@ -11,6 +11,6 @@ jobs:
       - name: build
         run: go build -v ./...
       - name: lint
-        run: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v4
         with:
           version: 1.51
