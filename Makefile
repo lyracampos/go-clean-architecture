@@ -16,6 +16,7 @@ build:
 deps/start:
 	docker compose up -d
 	until docker exec postgres pg_isready; do echo 'Waiting for postgres server...' && sleep 1; done
+	make migration/up
 
 .PHONY: deps/stop
 deps/stop:
