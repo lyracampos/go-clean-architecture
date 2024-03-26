@@ -1,4 +1,4 @@
-name: ci-golang-workflow
+name: continuos integrations
 on: [push]
 jobs:
   build:
@@ -9,4 +9,4 @@ jobs:
         with:
           go-version: 1.21.1
       - name: build
-        run: bo build -v ./...
+        run: go build -v ./...
