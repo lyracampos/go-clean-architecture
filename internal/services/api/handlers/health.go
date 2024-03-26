@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 
 	"go.uber.org/zap"
@@ -19,8 +18,9 @@ func NewHealthHandler(log *zap.SugaredLogger) *healthHandler {
 
 func (h *healthHandler) CheckStatus(rw http.ResponseWriter, r *http.Request) {
 	h.log.Info("Checking API status")
-	_, err := rw.Write([]byte("status ok"))
-	if err != nil {
-		log.Printf("CheckStatus - write failed: %v", err)
-	}
+	rw.Write([]byte("status ok"))
+	// _, err := rw.Write([]byte("status ok"))
+	// if err != nil {
+	// 	log.Printf("CheckStatus - write failed: %v", err)
+	// }
 }
