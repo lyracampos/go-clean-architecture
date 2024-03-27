@@ -5,13 +5,22 @@ definitions:
     CreateUserInput:
         properties:
             Email:
+                description: user email
                 type: string
             FirstName:
+                description: user first name
                 type: string
             LastName:
+                description: user last name
                 type: string
             Role:
+                description: user role [admin or contributor]
                 type: string
+        required:
+            - FirstName
+            - LastName
+            - Email
+            - Role
         type: object
         x-go-package: github.com/lyracampos/go-clean-architecture/internal/domain/usecases
     CreateUserOutput:

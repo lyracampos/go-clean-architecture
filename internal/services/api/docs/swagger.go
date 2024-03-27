@@ -1,3 +1,4 @@
+// nolint:unused
 // Package classification User API
 //
 // Documentation for User API

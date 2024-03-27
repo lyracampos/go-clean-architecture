@@ -16,11 +16,24 @@ type CreateUserUseCase interface {
 	Execute(ctx context.Context, input CreateUserInput) (CreateUserOutput, error)
 }
 
+// swagger:model
 type CreateUserInput struct {
+	// user first name
+	//
+	// required: true
 	FirstName string `validate:"required"`
-	LastName  string `validate:"required"`
-	Email     string `validate:"required"`
-	Role      string `validate:"required,oneof=admin contributor"`
+	// user last name
+	//
+	// required: true
+	LastName string `validate:"required"`
+	// user email
+	//
+	// required: true
+	Email string `validate:"required"`
+	// user role [admin or contributor]
+	//
+	// required: true
+	Role string `validate:"required,oneof=admin contributor"`
 }
 
 type CreateUserOutput struct {

@@ -1,9 +1,12 @@
+version: '3'
 services:
   postgres:
     container_name: postgres
     image: postgres:16.2
     ports:
-      - "5433:5432"
+      - "5432:5432"
+    networks: 
+      - lyra
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -22,3 +25,8 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+
+networks: 
+  lyra:
+    driver: bridge   
+  

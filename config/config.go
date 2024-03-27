@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -53,9 +54,10 @@ func NewConfig(configFilePath string) (*Config, error) {
 
 func readConfig(configFilePath string) (*viper.Viper, error) {
 	config := viper.New()
-	config.SetEnvPrefix("clean_architecture")
+	config.SetEnvPrefix("go_clean_architecture")
 	config.SetConfigType("yaml")
 	config.SetConfigFile(configFilePath)
+	config.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	config.AutomaticEnv()
 
 	if err := config.ReadInConfig(); err != nil {

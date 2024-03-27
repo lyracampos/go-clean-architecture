@@ -1,4 +1,4 @@
-PG_CONNECTION_STRING ?= 'postgres://user:password@localhost:5433/go_clean_arch?sslmode=disable'
+PG_CONNECTION_STRING ?= 'postgres://user:password@localhost:5432/go_clean_arch?sslmode=disable'
 MIGRATE := go run -tags='postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.17.0
 MIGRATIONS_PATH ?= './internal/gateways/postgres/migrations'
 
