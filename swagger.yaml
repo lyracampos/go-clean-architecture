@@ -1,0 +1,142 @@
+basePath: /
+consumes:
+    - application/json
+definitions:
+    CreateUserInput:
+        properties:
+            Email:
+                type: string
+            FirstName:
+                type: string
+            LastName:
+                type: string
+            Role:
+                type: string
+        type: object
+        x-go-package: github.com/lyracampos/go-clean-architecture/internal/domain/usecases
+    CreateUserOutput:
+        properties:
+            CreatedAt:
+                format: date-time
+                type: string
+            Email:
+                type: string
+            FirstName:
+                type: string
+            ID:
+                format: int64
+                type: integer
+            LastName:
+                type: string
+            Role:
+                type: string
+        type: object
+        x-go-package: github.com/lyracampos/go-clean-architecture/internal/domain/usecases
+    MessageError:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+        type: object
+        x-go-package: github.com/lyracampos/go-clean-architecture/internal/services/api/docs
+    User:
+        properties:
+            CreatedAt:
+                format: date-time
+                type: string
+            Email:
+                type: string
+            FirstName:
+                type: string
+            ID:
+                format: int64
+                type: integer
+            LastName:
+                type: string
+            Role:
+                type: string
+            UpdatedAt:
+                format: date-time
+                type: string
+        type: object
+        x-go-package: github.com/lyracampos/go-clean-architecture/internal/domain/entities
+info:
+    description: Documentation for User API
+    title: User API
+    version: 1.0.0
+paths:
+    /users:
+        get:
+            description: Return a list of users from system
+            operationId: ListUsers
+            responses:
+                "200":
+                    $ref: '#/responses/userListResponse'
+                "501":
+                    $ref: '#/responses/internalServerErrorResponse'
+            tags:
+                - users
+        post:
+            description: Add new user in the application
+            operationId: AddUser
+            parameters:
+                - description: Payload to add new user in application
+                  in: body
+                  name: Body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/CreateUserInput'
+            responses:
+                "201":
+                    $ref: '#/responses/userAddResponse'
+                "400":
+                    $ref: '#/responses/notFoundResponse'
+                "501":
+                    $ref: '#/responses/internalServerErrorResponse'
+            tags:
+                - users
+    /users/{id}:
+        get:
+            description: Return an user from system
+            operationId: GetUser
+            responses:
+                "200":
+                    $ref: '#/responses/userGetResponse'
+                "404":
+                    $ref: '#/responses/notFoundResponse'
+                "501":
+                    $ref: '#/responses/internalServerErrorResponse'
+            tags:
+                - users
+produces:
+    - application/json
+responses:
+    badRequestResponse:
+        description: BadRequest message error returned as string
+        schema:
+            $ref: '#/definitions/MessageError'
+    internalServerErrorResponse:
+        description: Internal server error message returned as a string
+        schema:
+            $ref: '#/definitions/MessageError'
+    notFoundResponse:
+        description: Not found message error returned as string
+        schema:
+            $ref: '#/definitions/MessageError'
+    userAddResponse:
+        description: Data structure representing user added
+        schema:
+            $ref: '#/definitions/CreateUserOutput'
+    userGetResponse:
+        description: Data structure representing an user
+        schema:
+            $ref: '#/definitions/User'
+    userListResponse:
+        description: Data structure representing a list of user
+        schema:
+            items:
+                $ref: '#/definitions/User'
+            type: array
+schemes:
+    - http
+swagger: "2.0"

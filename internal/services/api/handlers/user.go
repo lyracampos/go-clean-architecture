@@ -37,6 +37,12 @@ func NewUserHandler(
 	}
 }
 
+// swagger:route GET /users users ListUsers
+// Return a list of users from system
+// responses:
+//
+//	200: userListResponse
+//	501: internalServerErrorResponse
 func (h *userHandler) ListUsers(rw http.ResponseWriter, r *http.Request) {
 	h.log.Info("userHandler.ListUsers - started")
 
@@ -73,6 +79,13 @@ func (h *userHandler) ListUsers(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// swagger:route GET /users/{id} users GetUser
+// Return an user from system
+// responses:
+//
+//	200: userGetResponse
+//	404: notFoundResponse
+//	501: internalServerErrorResponse
 func (h *userHandler) GetUser(rw http.ResponseWriter, r *http.Request) {
 	h.log.Info("userHandler.GetUser - started")
 
@@ -111,6 +124,13 @@ func (h *userHandler) GetUser(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// swagger:route POST /users  users AddUser
+// Add new user in the application
+// responses:
+//
+//	201: userAddResponse
+//	400: notFoundResponse
+//	501: internalServerErrorResponse
 func (h *userHandler) CreateUser(rw http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	rw.Header().Set("Content-type", "application/json")

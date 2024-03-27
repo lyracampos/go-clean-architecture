@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 	"github.com/lyracampos/go-clean-architecture/config"
 	"github.com/lyracampos/go-clean-architecture/internal/domain"
@@ -64,6 +65,11 @@ func RunAPI(config *config.Config) {
 
 	createUserRouter := router.Methods(http.MethodPost).Subrouter()
 	createUserRouter.HandleFunc("/users", userHandler.CreateUser)
+
+	router.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
+	opts := middleware.SwaggerUIOpts{SpecURL: "swagger.yaml"}
+	sh := middleware.SwaggerUI(opts, nil)
+	router.Handle("/docs", sh)
 
 	http.Handle("/", router)
 

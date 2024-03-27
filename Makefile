@@ -4,6 +4,8 @@ MIGRATIONS_PATH ?= './internal/gateways/postgres/migrations'
 
 GOLANGCI_LINT := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.1
 
+GOSWAGGER := docker run --rm -e GOPATH=$$(go env GOPATH):/go -v $$(pwd):$$(pwd) -w $$(pwd) quay.io/goswagger/swagger:v0.30.4
+
 .PHONY: lint
 lint:
 	$(GOLANGCI_LINT) run --fix
@@ -37,3 +39,7 @@ migration/create:
 .PHONY: migration/up
 migration/up:
 	$(MIGRATE) -path $(MIGRATIONS_PATH) --database $(PG_CONNECTION_STRING) up
+
+.PHONY: swagger/generate
+swagger/generate:
+	$(GOSWAGGER) generate spec -o ./swagger.yaml --scan-models
