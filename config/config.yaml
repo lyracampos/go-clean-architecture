@@ -7,6 +7,6 @@ api:
     port: 8080
 
 database:
-  connectionString: "postgres://user:password@postgres:5432/go_clean_arch?sslmode=disable"
+  connectionString: "postgres://user:password@localhost:5432/go_clean_arch?sslmode=disable"
   maxOpenConnections: 0 #0 = unlimited
   maxIdleConnections: 2

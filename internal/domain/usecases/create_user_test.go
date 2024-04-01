@@ -46,7 +46,7 @@ func Test_Execute(t *testing.T) {
 			want: defaultCreateUserOutput(),
 		},
 		{
-			name: "fail creating new user with empty name",
+			name: "fail creating new user with empty first name",
 			args: args{
 				ctx:   ctx,
 				input: defaultCreateUserInput(WithCreateUserInputFirstName("")),
@@ -54,6 +54,68 @@ func Test_Execute(t *testing.T) {
 			beforeTest: nil,
 			wantErr:    true,
 			err:        errors.New("input is invalid: the field 'FirstName' should not be empty; "),
+		},
+		{
+			name: "fail creating new user with empty last name",
+			args: args{
+				ctx:   ctx,
+				input: defaultCreateUserInput(WithCreateUserInputLastName("")),
+			},
+			beforeTest: nil,
+			wantErr:    true,
+			err:        errors.New("input is invalid: the field 'LastName' should not be empty; "),
+		},
+		{
+			name: "fail creating new user with empty email",
+			args: args{
+				ctx:   ctx,
+				input: defaultCreateUserInput(WithCreateUserInputEmail("")),
+			},
+			beforeTest: nil,
+			wantErr:    true,
+			err:        errors.New("input is invalid: the field 'Email' should not be empty; "),
+		},
+		{
+			name: "fail creating new user with invalid email",
+			args: args{
+				ctx:   ctx,
+				input: defaultCreateUserInput(WithCreateUserInputEmail("invalid@domain")),
+			},
+			beforeTest: nil,
+			wantErr:    true,
+			err:        errors.New("input is invalid: the field 'Email' is invalid; "),
+		},
+		{
+			name: "fail creating new user when email is already in use",
+			args: args{
+				ctx:   ctx,
+				input: defaultCreateUserInput(),
+			},
+			beforeTest: func(userDatabase *mock.MockUserDatabaseGateway) {
+				userDatabase.EXPECT().InsertUser(gomock.Any(), gomock.Any()).Return(emailIsAlreadyInUseResult())
+			},
+			wantErr: true,
+			err:     errors.New("failed to create user into database: email is arealdy in use"),
+		},
+		{
+			name: "fail creating new user with empty role",
+			args: args{
+				ctx:   ctx,
+				input: defaultCreateUserInput(WithCreateUserInputRole("")),
+			},
+			beforeTest: nil,
+			wantErr:    true,
+			err:        errors.New("input is invalid: the field 'Role' should not be empty; "),
+		},
+		{
+			name: "fail creating new user with invalid role",
+			args: args{
+				ctx:   ctx,
+				input: defaultCreateUserInput(WithCreateUserInputRole("invalid")),
+			},
+			beforeTest: nil,
+			wantErr:    true,
+			err:        errors.New("input is invalid: the field 'Role' is not valid, expected one of [admin contributor]; "),
 		},
 	}
 
@@ -119,4 +181,8 @@ func defaultInsertedUserResult() (*entities.User, error) {
 		Email:     "useremail@domain.com",
 		Role:      "admin",
 	}, nil
+}
+
+func emailIsAlreadyInUseResult() (*entities.User, error) {
+	return &entities.User{}, domain.ErrEmailAlreadyInUse
 }

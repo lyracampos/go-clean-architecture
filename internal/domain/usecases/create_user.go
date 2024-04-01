@@ -29,7 +29,7 @@ type CreateUserInput struct {
 	// user email
 	//
 	// required: true
-	Email string `validate:"required"`
+	Email string `validate:"required,email"`
 	// user role [admin or contributor]
 	//
 	// required: true
