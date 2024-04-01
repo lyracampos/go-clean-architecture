@@ -51,3 +51,6 @@ mocks/generate:
 	$(MOCKGEN) -source=${GATEWAY_PORTS_PATH}/user_gateways.go \
 			   -destination=${GATEWAY_PORTS_MOCKS_PATH}/user_gateways_mock.go \
 			   -package=mock
+
+test/run:
+	go test ./... -cover

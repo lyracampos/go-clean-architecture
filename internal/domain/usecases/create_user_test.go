@@ -38,7 +38,7 @@ func Test_Execute(t *testing.T) {
 			name: "success creating new user",
 			args: args{
 				ctx:   ctx,
-				input: defaultCreateUserInputt(),
+				input: defaultCreateUserInput(),
 			},
 			beforeTest: func(userDatabase *mock.MockUserDatabaseGateway) {
 				userDatabase.EXPECT().InsertUser(gomock.Any(), gomock.Any()).Return(defaultInsertedUserResult())
@@ -49,7 +49,7 @@ func Test_Execute(t *testing.T) {
 			name: "fail creating new user with empty name",
 			args: args{
 				ctx:   ctx,
-				input: defaultCreateUserInputt(WithCreateUserInputFirstName("")),
+				input: defaultCreateUserInput(WithCreateUserInputFirstName("")),
 			},
 			beforeTest: nil,
 			wantErr:    true,
@@ -90,7 +90,7 @@ func Test_Execute(t *testing.T) {
 	}
 }
 
-func defaultCreateUserInputt(options ...CreateUserInputOption) *CreateUserInput {
+func defaultCreateUserInput(options ...CreateUserInputOption) *CreateUserInput {
 	options = append([]CreateUserInputOption{
 		WithCreateUserInputFirstName("Guilherme"),
 		WithCreateUserInputLastName("Lyra"),
@@ -119,8 +119,4 @@ func defaultInsertedUserResult() (*entities.User, error) {
 		Email:     "useremail@domain.com",
 		Role:      "admin",
 	}, nil
-}
-
-func invalid() (*entities.User, error) {
-	return &entities.User{}, errors.New("asasa")
 }
