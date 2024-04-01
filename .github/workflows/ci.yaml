@@ -1,7 +1,7 @@
 name: continuos integrations
 on: [push]
 jobs:
-  check-application:
+  continuos-integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
