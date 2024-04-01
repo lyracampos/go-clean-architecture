@@ -36,6 +36,41 @@ type CreateUserInput struct {
 	Role string `validate:"required,oneof=admin contributor"`
 }
 
+type CreateUserInputOption func(*CreateUserInput)
+
+func NewCreateUserInput(opts ...CreateUserInputOption) *CreateUserInput {
+	input := &CreateUserInput{}
+	for _, opt := range opts {
+		opt(input)
+	}
+
+	return input
+}
+
+func WithCreateUserInputFirstName(firstName string) CreateUserInputOption {
+	return func(u *CreateUserInput) {
+		u.FirstName = firstName
+	}
+}
+
+func WithCreateUserInputLastName(lastName string) CreateUserInputOption {
+	return func(u *CreateUserInput) {
+		u.LastName = lastName
+	}
+}
+
+func WithCreateUserInputEmail(email string) CreateUserInputOption {
+	return func(u *CreateUserInput) {
+		u.Email = email
+	}
+}
+
+func WithCreateUserInputRole(role string) CreateUserInputOption {
+	return func(u *CreateUserInput) {
+		u.Role = role
+	}
+}
+
 type CreateUserOutput struct {
 	ID        int64
 	FirstName string

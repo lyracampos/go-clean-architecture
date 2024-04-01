@@ -2,9 +2,12 @@ PG_CONNECTION_STRING ?= 'postgres://user:password@localhost:5432/go_clean_arch?s
 MIGRATE := go run -tags='postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.17.0
 MIGRATIONS_PATH ?= './internal/gateways/postgres/migrations'
 
-GOLANGCI_LINT := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.1
+GATEWAY_PORTS_PATH=./internal/domain/ports
+GATEWAY_PORTS_MOCKS_PATH=./internal/domain/ports/mocks
 
-GOSWAGGER := docker run --rm -e GOPATH=$$(go env GOPATH):/go -v $$(pwd):$$(pwd) -w $$(pwd) quay.io/goswagger/swagger:v0.30.4
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.1
+SWAGGER := docker run --rm -e GOPATH=$$(go env GOPATH):/go -v $$(pwd):$$(pwd) -w $$(pwd) quay.io/goswagger/swagger:v0.30.4
+MOCKGEN := go run go.uber.org/mock/mockgen@v0.4.0
 
 .PHONY: lint
 lint:
@@ -43,3 +46,8 @@ migration/up:
 .PHONY: swagger/generate
 swagger/generate:
 	$(GOSWAGGER) generate spec -o ./swagger.yaml --scan-models
+
+mocks/generate:
+	$(MOCKGEN) -source=${GATEWAY_PORTS_PATH}/user_gateways.go \
+			   -destination=${GATEWAY_PORTS_MOCKS_PATH}/user_gateways_mock.go \
+			   -package=mock
