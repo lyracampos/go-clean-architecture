@@ -51,7 +51,7 @@ func (g *userDatabase) ListUser(ctx context.Context, filter ports.ListUserFilter
 		return nil, newListError(models.UsersTableName, err)
 	}
 
-	list := make([]*entities.User, 0)
+	var list []*entities.User
 	for _, model := range modelList {
 		list = append(list, model.ToEntity())
 	}
