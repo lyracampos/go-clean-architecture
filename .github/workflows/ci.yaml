@@ -28,4 +28,4 @@ jobs:
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     steps:
       - name: echo welcome
-        run: echo "hello deployment"
+        run: echo "hello deploymentss"
