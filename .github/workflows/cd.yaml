@@ -1,0 +1,15 @@
+name: continuous_deployment
+on:
+  workflow_run:
+    workflows: ["continuos integrations"]
+    types:
+      - completed
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'      
+jobs:
+  continuos-deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: echo welcome
+        run: echo "hello deployment"
