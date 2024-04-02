@@ -13,7 +13,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func Test_Execute(t *testing.T) {
+func TestCreateUserExecute(t *testing.T) {
 	ctx := context.Background()
 
 	ctrl := gomock.NewController(t)
