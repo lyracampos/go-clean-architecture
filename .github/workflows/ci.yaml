@@ -1,12 +1,11 @@
 name: continuos integrations
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
       - development
       - feature/*
-    tags: 
-      - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
   continuos-integration:
     runs-on: ubuntu-latest
@@ -23,3 +22,10 @@ jobs:
           version: v1.54
       - name: test
         run: go test -v ./... -cover
+  continuos-deployment:
+    needs: continuos-integration
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    steps:
+      - name: echo welcome
+        run: echo "hello deployment"
