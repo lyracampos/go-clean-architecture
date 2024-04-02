@@ -6,6 +6,8 @@ on:
       - main
       - development
       - feature/*
+  release:
+    types: [published]
 jobs:
   continuos-integration:
     runs-on: ubuntu-latest
@@ -22,10 +24,10 @@ jobs:
           version: v1.54
       - name: test
         run: go test -v ./... -cover
-  continuos-deployment:
-    needs: continuos-integration
-    runs-on: ubuntu-latest
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
-    steps:
-      - name: echo welcome
-        run: echo "hello deploymentss"
+  # continuos-deployment:
+  #   needs: continuos-integration
+  #   runs-on: ubuntu-latest
+  #   if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: echo welcome
+  #       run: echo "hello deploymentss"
